@@ -1,4 +1,4 @@
-package ru.homework1.myhashmapalpha;
+package edu.javaee.myhashmapalpha;
 
 import org.junit.Test;
 

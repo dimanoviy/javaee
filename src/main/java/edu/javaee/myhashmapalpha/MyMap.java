@@ -1,4 +1,4 @@
-package ru.homework1.myhashmapalpha;
+package edu.javaee.myhashmapalpha;
 
 public interface MyMap<K, V> {
 

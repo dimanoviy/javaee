@@ -1,16 +1,11 @@
-package ru.homework1;
+package edu.javaee;
 
-import ru.homework1.myhashmap.MyHashMap;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import edu.javaee.myhashmap.MyHashMap;
 
 public class TestClass {
     public static void main(String[] args) {
 
-        MyHashMap<String, String> map = new MyHashMap<>();
+        MyHashMap<String, String> map = new MyHashMap();
         map.put("key1", "value1");
         map.put("key2", "value2");
         map.put("key3", "value3");
@@ -29,6 +24,7 @@ public class TestClass {
 
         printArray(map.getAllEntries());
         map.print();
+//        HashMap hm = new HashMap();
     }
 
     static <T> void printArray(T[] array) {

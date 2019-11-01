@@ -1,10 +1,9 @@
-package ru.homework1.myhashmap;
+package edu.javaee.myhashmap;
 
 import java.security.InvalidParameterException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.Collections.*;
 
 /**
  * собственная реализация HashMap на основе хэштаблиц
@@ -165,7 +164,6 @@ public class MyHashMap<K, V> implements Map<K, V> {
 
     public void put(MyEntry<K, V> newEntry) {
         int id = generateID(newEntry.getKey());
-
         if (isEmptyID(id)) {
             entries[id] = newEntry;
             size++;
@@ -251,17 +249,27 @@ public class MyHashMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<K> keySet() {
-        return null;
+        Set<K> hs = new HashSet<>();
+        for (MyEntry<K, V> entry : entries) {
+            hs.add(entry.getKey());
+        }
+        return hs;
     }
 
     @Override
     public Collection<V> values() {
-        return null;
+        ArrayList<V> al = new ArrayList<>();
+        for (MyEntry<K, V> entry : entries) {
+            al.add(entry.getValue());
+        }
+        return al;
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return null;
+        HashSet<Entry<K, V>> hs = new HashSet<Entry<K, V>>();
+        addAll(hs, entries);
+        return hs;
     }
 
     public void print() {
