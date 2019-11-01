@@ -14,9 +14,7 @@ public class TestClass {
         map.put("key6", "value4");
         map.put("key7", "value4");
         map.put("key8", "value4");
-
         System.out.println(map.size());
-
 //        map.resize(30);
         map.print();
         System.out.println(map.size());

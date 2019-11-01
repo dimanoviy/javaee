@@ -146,7 +146,9 @@ public class MyHashMap<K, V> implements Map<K, V> {
         int id = generateID(key);
 
         if (isEmptyID(id)) {
-            return easyPut(key, value, id);
+            entries[id] = new MyEntry(key, value);
+            size++;
+            return null;
         }
         MyEntry entry = entries[id];
         while (true) {
@@ -184,20 +186,10 @@ public class MyHashMap<K, V> implements Map<K, V> {
         size++;
     }
 
-    private V easyPut(K key, V value, int id) {
-        entries[id] = new MyEntry(key, value);
-        size++;
-        return null;
-    }
-
     private V update(MyEntry<K, V> entry, V value) {
         V oldValue = (V) entry.getValue();
         entry.setValue(value);
         return oldValue;
-    }
-
-    private MyEntry getEntry(int id) {
-        return entries[id];
     }
 
     @Override
