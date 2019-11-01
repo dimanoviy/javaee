@@ -65,7 +65,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
         }
     }
 
-    private void checkCapasity() {
+    private void checkCapacity() {
         if (size >= threshold) resize();
     }
 
@@ -74,11 +74,11 @@ public class MyHashMap<K, V> implements Map<K, V> {
     }
 
     public void resize(int newCapacity) {
-        MyEntry<K,V>[] oldEntries = this.getAllEntries();
+        MyEntry<K, V>[] oldEntries = this.getAllEntries();
         this.capacity = newCapacity;
         entries = new MyEntry[newCapacity];
         this.size = 0;
-        for (int i =0; i < oldEntries.length;i++){
+        for (int i = 0; i < oldEntries.length; i++) {
             oldEntries[i].setNextCollision(null);
             put(oldEntries[i]);
         }
@@ -93,8 +93,8 @@ public class MyHashMap<K, V> implements Map<K, V> {
             }
             allEntries[id] = entries[i];
             id++;
-            while (allEntries[id-1].hasNext()) {
-                allEntries[id] = allEntries[id-1].getNextCollision();
+            while (allEntries[id - 1].hasNext()) {
+                allEntries[id] = allEntries[id - 1].getNextCollision();
                 id++;
             }
         }
@@ -162,7 +162,8 @@ public class MyHashMap<K, V> implements Map<K, V> {
         size++;
         return null;
     }
-    public void put(MyEntry<K,V> newEntry) {
+
+    public void put(MyEntry<K, V> newEntry) {
         int id = generateID(newEntry.getKey());
 
         if (isEmptyID(id)) {
@@ -186,7 +187,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
     }
 
     private V easyPut(K key, V value, int id) {
-        entries[id] = new MyEntry<>(key, value);
+        entries[id] = new MyEntry(key, value);
         size++;
         return null;
     }
@@ -207,7 +208,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
         if (isEmptyID(id)) return null;
         MyEntry tmpPrevEntry;
         MyEntry entry = entries[id];
-        if (entry.getKey().equals(key)){//если верхний в серьге
+        if (entry.getKey().equals(key)) {//если верхний в серьге
             entries[id] = entry.hasNext() ? entry.getNextCollision() : null;
             size--;
             return (V) entry.getValue();
@@ -218,7 +219,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
                     entry = entry.getNextCollision();
                 } else return null;
                 if (entry.getKey().equals(key)) {
-                    if (!entry.hasNext()){//следующий - пусто
+                    if (!entry.hasNext()) {//следующий - пусто
                         tmpPrevEntry.setNextCollision(null);
                     } else {//следующий не пусто
                         tmpPrevEntry.setNextCollision(entry.getNextCollision());
@@ -233,7 +234,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
         if (m.size() > this.capacity) {
-            resize((int) ((m.size()+this.size)/loadFactor));
+            resize((int) ((m.size() + this.size) / loadFactor));
         }
         for (Map.Entry<? extends K, ? extends V> pair : m.entrySet()) {
             this.put(pair.getKey(), pair.getValue());

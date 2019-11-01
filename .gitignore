@@ -7,3 +7,14 @@
 /.gitignore
 /plan.txt
 /target/
+/target/
+/target/classes/
+/target/generated-sources/
+/target/generated-test-sources/
+/target/maven-archiver/
+/target/maven-status/
+/target/surefire-reports/
+/target/test-classes/
+/target/HomeWorkArt-1.0-SNAPSHOT.jar
+/.gitignore
+/HomeWorkArt.iml

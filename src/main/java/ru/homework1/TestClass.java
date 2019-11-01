@@ -1,8 +1,6 @@
 package ru.homework1;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import ru.homework1.myhashmap.MyHashMap;
-import sun.nio.cs.Surrogate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
