@@ -2,6 +2,7 @@ package edu.javaee.myhashmap;
 
 import org.junit.Test;
 
+import java.util.EmptyStackException;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -38,6 +39,7 @@ public class MyHashMapTest {
     @Test
     public void containsKey() {
         assertEquals(map.containsKey("key1"), mapOrig.containsKey("key1"));
+        assertEquals(map.containsKey("key11"), mapOrig.containsKey("key11"));
     }
 
     @Test
@@ -48,22 +50,32 @@ public class MyHashMapTest {
 
     @Test
     public void get() {
+        assertEquals(map.get("key1"), mapOrig.get("key1"));
+        assertEquals(map.get("key11"), mapOrig.get("key11"));
     }
 
     @Test
     public void put() {
+        assertEquals(map.put("key", "value"), mapOrig.put("key", "value"));
     }
 
     @Test
     public void remove() {
+        assertEquals(map.remove("key", "value"), mapOrig.remove("key", "value"));
     }
 
     @Test
     public void putAll() {
+//        assertEquals(assertTrue(map.putAll(mapOrig)), assertTrue(mapOrig.putAll(map)));
     }
 
     @Test
     public void clear() {
+        map.clear();
+        for (MyEntry e :
+                map.getAllEntries()) {
+            if (e != null) throw new RuntimeException();//WHAT EXCEPTION SHOULD I USE? OR HOW TO TEST?
+        }
     }
 
     @Test

@@ -113,22 +113,42 @@ public class MyHashMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
-        return search((K) key) != null;
+        return searchKey((K) key) != null;
     }
 
     @Override
     public boolean containsValue(Object value) {
-        return false;
+//        return !(searchValue((V) value).equals(null));
+        return !(searchValue((V) value) == null);
     }
 
-    private MyEntry search(K key) {
+    private MyEntry searchKey(K key) {
+        for (MyEntry e : entries) {
+            if (e.getKey().equals(key)) return e;
+        }
+        return null;
+    }
 
+    private MyEntry searchValue(V value) {
+        for (MyEntry e : entries) {
+            if (e.getValue().equals(value)) return e;
+        }
+        return null;
     }
 
     @Override
     public V get(Object key) {
-        return (V) search((K) key).getValue();
+        return ((V) searchKey((K) key) == null) ? null : (V) searchKey((K) key).getValue();
+//        if (searchKey((K) key) == null) {// SAME searchKey((K) key).equals(null) DOESNT WORK!
+//            return null;
+//        } else {
+//            return (V) searchKey((K) key).getValue();
+//        }
     }
+//    public V get(Object key) {
+//        Node<K,V> e;
+//        return (e = getNode(hash(key), key)) == null ? null : e.value;
+//    }
 
     @Override
     public V put(K key, V value) {
