@@ -22,7 +22,6 @@ public class MyHashMap<K, V> implements Map<K, V> {
     private double loadFactor;
     private int threshold;
 
-
     public MyHashMap() {
         this(DEFAULT_CAPACITY);
     }
@@ -52,6 +51,10 @@ public class MyHashMap<K, V> implements Map<K, V> {
 
     private boolean isEmptyID(int id) {
         return entries[id] == null;
+    }
+
+    private boolean isEmptyEntry(MyEntry entry) {
+        return entry == null;
     }
 
     private void calculateThreshold() {
@@ -86,20 +89,45 @@ public class MyHashMap<K, V> implements Map<K, V> {
     public MyEntry<K, V>[] getAllEntries() {
         MyEntry<K, V>[] allEntries = new MyEntry[size];
         int id = 0;
-        for (int i = 0; i < entries.length; i++) {
-            if (isEmptyID(i)) {
-                continue;
-            }
-            allEntries[id] = entries[i];
+        for (int i = 0; i < size; i++) {
+            if (isEmptyID(i)) continue;
+            allEntries[i] = entries[i];
             id++;
-            while (allEntries[id - 1].hasNext()) {
-                allEntries[id] = allEntries[id - 1].getNextCollision();
-                id++;
+            while (true) {
+                if (allEntries[i].hasNext()) {
+                    allEntries[size - 1 - id] = allEntries[i].getNextCollision();
+                    i++;
+                }
+                else break;
             }
         }
         return allEntries;
-    }
+        }
+//        addAll(allEntries, entries);
+//        for (int i = 0; i < entries.length; i++) {
+//            MyEntry e = entries[i];
+//            do {
+//                allEntries.add(e);
+//                if (e.hasNext()) e = e.getNextCollision();
+//                else break;
+//            } while (true);
+//        }
+//        return allEntries;
 
+//        int id = 0;
+//        for (int i = 0; i < entries.length; i++) {
+//            if (isEmptyID(i)) {
+//                continue;
+//            }
+//            allEntries[id] = entries[i];
+//            id++;
+//            while (allEntries[id - 1].hasNext()) {
+//                allEntries[id] = allEntries[id - 1].getNextCollision();
+//                id++;
+//            }
+//        }
+//        return allEntries;
+//    }
 
     @Override
     public int size() {
@@ -139,16 +167,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
     @Override
     public V get(Object key) {
         return ((V) searchKey((K) key) == null) ? null : (V) searchKey((K) key).getValue();
-//        if (searchKey((K) key) == null) {// SAME searchKey((K) key).equals(null) DOESNT WORK!
-//            return null;
-//        } else {
-//            return (V) searchKey((K) key).getValue();
-//        }
     }
-//    public V get(Object key) {
-//        Node<K,V> e;
-//        return (e = getNode(hash(key), key)) == null ? null : e.value;
-//    }
 
     @Override
     public V put(K key, V value) {
@@ -184,7 +203,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
         while (true) {
             if (entry.getKey().equals(newEntry.getKey())) {
                 entry.setValue(newEntry.getValue());
-                size++;
+//                size++; //This case is updating entry so shouldn't size++
                 return;
             }
             if (entry.hasNext()) {
@@ -269,7 +288,13 @@ public class MyHashMap<K, V> implements Map<K, V> {
     @Override
     public Set<Entry<K, V>> entrySet() {
         HashSet<Entry<K, V>> hs = new HashSet<Entry<K, V>>();
-        addAll(hs, entries);
+        for (MyEntry e : entries) {
+            while (true) {
+                hs.add(e);
+                if (e.hasNext()) e = e.getNextCollision();
+                else break;
+            }
+        }
         return hs;
     }
 
@@ -277,7 +302,6 @@ public class MyHashMap<K, V> implements Map<K, V> {
         for (int i = 0; i < entries.length; i++) {
             if (entries[i] != null) {
                 MyEntry entry = entries[i];
-
                 while (true) {
                     System.out.println(i + " " + entry);
                     if (entry.hasNext()) entry = entry.getNextCollision();

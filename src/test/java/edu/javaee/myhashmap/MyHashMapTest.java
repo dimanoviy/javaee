@@ -15,7 +15,6 @@ public class MyHashMapTest {
         map.put("key3","value3");
         map.put("key4","value4");
         map.put("key5","value5");
-
     }
     HashMap<String, String> mapOrig = new HashMap<>(3);
     {
@@ -24,8 +23,12 @@ public class MyHashMapTest {
         mapOrig.put("key3","value3");
         mapOrig.put("key4","value4");
         mapOrig.put("key5","value5");
-
     }
+    @Test
+    public void values() {
+        assertEquals(map.values(), mapOrig.values());
+    }
+
     @Test
     public void size() {
         assertEquals(map.size(), mapOrig.size());
@@ -56,7 +59,10 @@ public class MyHashMapTest {
 
     @Test
     public void put() {
-        assertEquals(map.put("key", "value"), mapOrig.put("key", "value"));
+        assertEquals(map.put("key1", "value1"), mapOrig.put("key1", "value1"));
+        assertEquals(map.put("key2", "value2"), mapOrig.put("key2", "value2"));
+        assertEquals(map.put("key3", "value3"), mapOrig.put("key3", "value3"));
+        assertEquals(map.put("key4", "value4"), mapOrig.put("key4", "value4"));
     }
 
     @Test
@@ -80,13 +86,13 @@ public class MyHashMapTest {
 
     @Test
     public void keySet() {
+        assertEquals(map.keySet(), mapOrig.keySet());
     }
 
-    @Test
-    public void values() {
-    }
+
 
     @Test
     public void entrySet() {
+        assertEquals(map.entrySet(), mapOrig.entrySet());
     }
 }
