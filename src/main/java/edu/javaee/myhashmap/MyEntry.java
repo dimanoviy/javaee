@@ -3,7 +3,7 @@ package edu.javaee.myhashmap;
 import java.util.Map;
 import java.util.Objects;
 
-public class MyEntry<K, V> implements Map.Entry<K, V> {
+public class  MyEntry<K, V> implements Map.Entry<K, V> {
 
     private MyEntry nextCollision;
     private K key;

@@ -122,18 +122,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
     }
 
     private MyEntry search(K key) {
-        validKey(key);
-        MyEntry entry = entries[generateID(key)];
-        if (entry == null) return null;
 
-        while (true) {
-            if (entry.getKey().equals(key)) {
-                return entry;
-            }
-            if (entry.hasNext()) {
-                entry = entry.getNextCollision();
-            } else return null;
-        }
     }
 
     @Override
