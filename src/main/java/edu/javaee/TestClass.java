@@ -10,10 +10,10 @@ public class TestClass {
         map.put("key2", "value2");
         map.put("key3", "value3");
         map.put("key4", "value4");
-        map.put("key5", "value4");
-        map.put("key6", "value4");
-        map.put("key7", "value4");
-        map.put("key8", "value4");
+        map.put("key5", "value5");
+        map.put("key6", "value6");
+        map.put("key7", "value7");
+        map.put("key8", "value8");
         System.out.println(map.getAllEntries());
 //        System.out.println(map.entrySet());
 //        System.out.println(map.size());

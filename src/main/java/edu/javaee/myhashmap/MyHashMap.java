@@ -62,9 +62,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
     }
 
     private void validKey(K key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
+        if (key == null) throw new NullPointerException();
     }
 
     private void checkCapacity() {
@@ -89,45 +87,19 @@ public class MyHashMap<K, V> implements Map<K, V> {
     public MyEntry<K, V>[] getAllEntries() {
         MyEntry<K, V>[] allEntries = new MyEntry[size];
         int id = 0;
-        for (int i = 0; i < size; i++) {
-            if (isEmptyID(i)) continue;
-            allEntries[i] = entries[i];
+        for (MyEntry e : entries) {
+            if (isEmptyEntry(e)) continue;
+            allEntries[id] = e;
             id++;
             while (true) {
-                if (allEntries[i].hasNext()) {
-                    allEntries[size - 1 - id] = allEntries[i].getNextCollision();
-                    i++;
-                }
-                else break;
+                if (allEntries[id - 1].hasNext()) {
+                    allEntries[id] = allEntries[id - 1].getNextCollision();
+                    id++;
+                } else break;
             }
         }
         return allEntries;
         }
-//        addAll(allEntries, entries);
-//        for (int i = 0; i < entries.length; i++) {
-//            MyEntry e = entries[i];
-//            do {
-//                allEntries.add(e);
-//                if (e.hasNext()) e = e.getNextCollision();
-//                else break;
-//            } while (true);
-//        }
-//        return allEntries;
-
-//        int id = 0;
-//        for (int i = 0; i < entries.length; i++) {
-//            if (isEmptyID(i)) {
-//                continue;
-//            }
-//            allEntries[id] = entries[i];
-//            id++;
-//            while (allEntries[id - 1].hasNext()) {
-//                allEntries[id] = allEntries[id - 1].getNextCollision();
-//                id++;
-//            }
-//        }
-//        return allEntries;
-//    }
 
     @Override
     public int size() {
@@ -146,21 +118,16 @@ public class MyHashMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsValue(Object value) {
-//        return !(searchValue((V) value).equals(null));
         return !(searchValue((V) value) == null);
     }
 
     private MyEntry searchKey(K key) {
-        for (MyEntry e : entries) {
-            if (e.getKey().equals(key)) return e;
-        }
+        for (MyEntry e : entries) if (e.getKey().equals(key)) return e;
         return null;
     }
 
     private MyEntry searchValue(V value) {
-        for (MyEntry e : entries) {
-            if (e.getValue().equals(value)) return e;
-        }
+        for (MyEntry e : entries) if (e.getValue().equals(value)) return e;
         return null;
     }
 
