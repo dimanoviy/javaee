@@ -99,7 +99,13 @@ public class MyHashMap<K, V> implements Map<K, V> {
             }
         }
         return allEntries;
-        }
+    }
+
+    public ArrayList<MyEntry> getAllEntriesArrayList() {
+        ArrayList<MyEntry> arrayList = new ArrayList<>();
+        Collections.addAll(arrayList,getAllEntries());
+        return arrayList;
+    }
 
     @Override
     public int size() {
@@ -237,31 +243,21 @@ public class MyHashMap<K, V> implements Map<K, V> {
     @Override
     public Set<K> keySet() {
         Set<K> hs = new HashSet<>();
-        for (MyEntry<K, V> entry : entries) {
-            hs.add(entry.getKey());
-        }
+        for (MyEntry e : getAllEntriesArrayList()) hs.add((K) e.getKey());
         return hs;
     }
 
     @Override
     public Collection<V> values() {
-        ArrayList<V> al = new ArrayList<>();
-        for (MyEntry<K, V> entry : entries) {
-            al.add(entry.getValue());
-        }
-        return al;
+        Collection c = new ArrayList();
+        for (MyEntry e : getAllEntriesArrayList()) c.add(e.getValue());
+        return c;
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
         HashSet<Entry<K, V>> hs = new HashSet<Entry<K, V>>();
-        for (MyEntry e : entries) {
-            while (true) {
-                hs.add(e);
-                if (e.hasNext()) e = e.getNextCollision();
-                else break;
-            }
-        }
+        hs.addAll((Collection<? extends Entry<K, V>>) getAllEntriesArrayList());
         return hs;
     }
 

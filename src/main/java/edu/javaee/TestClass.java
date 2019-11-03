@@ -4,7 +4,6 @@ import edu.javaee.myhashmap.MyHashMap;
 
 public class TestClass {
     public static void main(String[] args) {
-
         MyHashMap<String, String> map = new MyHashMap();
         map.put("key1", "value1");
         map.put("key2", "value2");
