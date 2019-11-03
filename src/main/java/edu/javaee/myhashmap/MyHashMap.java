@@ -257,7 +257,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
     @Override
     public Set<Entry<K, V>> entrySet() {
         HashSet<Entry<K, V>> hs = new HashSet<Entry<K, V>>();
-        hs.addAll((Collection<? extends Entry<K, V>>) getAllEntriesArrayList());
+        for (MyEntry e : getAllEntriesArrayList()) hs.add(e);
         return hs;
     }
 
