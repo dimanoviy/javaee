@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class  MyEntry<K, V> implements Map.Entry<K, V> {
 
-    private MyEntry nextCollision;
+    private MyEntry nextEntry;
     private K key;
     private V value;
     private int hashCode;
@@ -17,7 +17,7 @@ public class  MyEntry<K, V> implements Map.Entry<K, V> {
     }
 
     public boolean hasNext() {
-        return nextCollision != null;
+        return nextEntry != null;
     }
 
     @Override
@@ -39,12 +39,12 @@ public class  MyEntry<K, V> implements Map.Entry<K, V> {
         return Objects.hash(key, value);
     }
 
-    public MyEntry getNextCollision() {
-        return nextCollision;
+    public MyEntry getNextEntry() {
+        return nextEntry;
     }
 
-    public void setNextCollision(MyEntry nextCollision) {
-        this.nextCollision = nextCollision;
+    public void setNextEntry(MyEntry nextEntry) {
+        this.nextEntry = nextEntry;
     }
 
     public K getKey() {

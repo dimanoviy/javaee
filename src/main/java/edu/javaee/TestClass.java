@@ -4,7 +4,7 @@ import edu.javaee.myhashmap.MyHashMap;
 
 public class TestClass {
     public static void main(String[] args) {
-        MyHashMap<String, String> map = new MyHashMap();
+        MyHashMap<String, String> map = new MyHashMap(3);
         map.put("key1", "value1");
         map.put("key2", "value2");
         map.put("key3", "value3");
@@ -13,9 +13,11 @@ public class TestClass {
         map.put("key6", "value6");
         map.put("key7", "value7");
         map.put("key8", "value8");
-        System.out.println(map.getAllEntries());
+        map.remove("key1");
+//        map.put("key7", "value77");
+//        System.out.println(map.getAllEntries());
 //        System.out.println(map.entrySet());
-//        System.out.println(map.size());
+//        System.out.println(map.searchKey("key8"));
 //        map.resize(30);
         map.print();
 //        printArray(map.getAllEntries());
