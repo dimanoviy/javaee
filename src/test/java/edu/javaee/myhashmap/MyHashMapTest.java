@@ -78,8 +78,7 @@ public class MyHashMapTest {
     @Test
     public void clear() {
         map.clear();
-        for (MyEntry e :
-                map.getAllEntries()) {
+        for (MyEntry e : map.getAllEntries()) {
             if (e != null) throw new RuntimeException();//WHAT EXCEPTION SHOULD I USE? OR HOW TO TEST?
         }
     }

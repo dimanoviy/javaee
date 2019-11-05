@@ -79,6 +79,10 @@ public class MyHashMap<K, V> implements Map<K, V> {
         resize(capacity * 2);
     }
 
+    /**
+     * Изменить размер массива на @newCapacity
+     * @param newCapacity
+     */
     public void resize(int newCapacity) {
         MyEntry<K, V>[] oldEntries = this.getAllEntries();
         this.capacity = newCapacity;
@@ -90,6 +94,10 @@ public class MyHashMap<K, V> implements Map<K, V> {
         }
     }
 
+    /**
+     * Получить элементы в массиве элементов MyEntry
+     * @return
+     */
     public MyEntry<K, V>[] getAllEntries() {
         MyEntry<K, V>[] allEntries = new MyEntry[size];
         int id = 0;
@@ -107,27 +115,49 @@ public class MyHashMap<K, V> implements Map<K, V> {
         return allEntries;
     }
 
+    /**
+     * Получить элементы в массиве ArrayList
+     * @return
+     */
     public ArrayList<MyEntry> getAllEntriesArrayList() {
         ArrayList<MyEntry> arrayList = new ArrayList<>();
         Collections.addAll(arrayList, getAllEntries());
         return arrayList;
     }
 
+    /**
+     * Получить количество элементов
+     * @return
+     */
     @Override
     public int size() {
         return size;
     }
 
+    /**
+     * Проверить пустой ли массив
+     * @return
+     */
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /**
+     * Содержится ли объект с таким ключом key в массиве
+     * @param key Ключ
+     * @return
+     */
     @Override
     public boolean containsKey(Object key) {
         return searchKey((K) key) != null;
     }
 
+    /** Содержится ли объект с таким значением value в массиве
+     *
+     * @param value
+     * @return
+     */
     @Override
     public boolean containsValue(Object value) {
         return !(searchValue((V) value) == null);
@@ -173,33 +203,21 @@ public class MyHashMap<K, V> implements Map<K, V> {
         return ((V) searchKey((K) key) == null) ? null : (V) searchKey((K) key).getValue();
     }
 
+    /**
+     * Добавить (положить) элемент (@key, @value) в массив
+     * @param key Ключ
+     * @param value Значение
+     * @return
+     */
     @Override
     public V put(K key, V value) {
-        int id = generateID(key);
-        if (isEmptyID(id)) {
-            this.entries[id] = new MyEntry(key, value);
-            this.size++;
-            return null;
-        }
-        MyEntry entry = this.entries[id];
-        while (true) {
-            if (entry.getKey().equals(key)) {
-                return (V) updateValue(entry, value);
-            }
-            if (entry.hasNext()) {
-                entry = entry.getNextEntry();
-            } else {
-                break;
-            }
-        }
-        entry.setNextEntry(new MyEntry<K, V>(key, value));
-        this.size++;
-        return null;
-//        throw new UnsupportedOperationException("Sorry, I tried but I give up");
+        MyEntry entry = new MyEntry(key, value);
+        put(entry);
+        return value;
     }
 
     /**
-     * Метод добавить (положить) новый елемент @newEntry
+     * Добавить (положить) новый елемент @newEntry в массив
      *
      * @param newEntry
      */
@@ -282,6 +300,11 @@ public class MyHashMap<K, V> implements Map<K, V> {
         this.entries[ID] = entry;
     }
 
+    private void putEntryByKeyValue(MyEntry<K, V> entry, K key, V value) {
+        int id = generateID(key);
+        putEntryByID(entry, id);
+    }
+
     /** Добавляет (укладывает) элемент класса map целиком
      *
      * @param map
@@ -291,8 +314,8 @@ public class MyHashMap<K, V> implements Map<K, V> {
         if (map.size() > this.capacity) {
             resize((int) ((map.size() + this.size) / this.loadFactor));
         }
-        for (Map.Entry<? extends K, ? extends V> pair : map.entrySet()) {
-            this.put(pair.getKey(), pair.getValue());
+        for (Map.Entry<? extends K, ? extends V> entry : map.entrySet()) {
+            this.put(entry.getKey(), entry.getValue());
         }
     }
 

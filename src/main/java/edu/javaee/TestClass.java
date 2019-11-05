@@ -13,7 +13,8 @@ public class TestClass {
         map.put("key6", "value6");
         map.put("key7", "value7");
         map.put("key8", "value8");
-        map.remove("key1");
+        MyHashMap<String, String> map2 = new MyHashMap<>();
+//        map.remove("key1");
 //        map.put("key7", "value77");
 //        System.out.println(map.getAllEntries());
 //        System.out.println(map.entrySet());
