@@ -44,8 +44,7 @@ public class MyLinkedList<E> implements List {
         if (node != null) {
             do {
                 if (node.getElement() == element) {
-                    unlinkNode(node);
-                    return true;
+                    return unlinkNode(node);
                 }
                 node=node.getNext();
             } while (node.hasNext());
@@ -53,7 +52,7 @@ public class MyLinkedList<E> implements List {
         return false;
     }
 
-    private void unlinkNode(MyNode node) {
+    private boolean unlinkNode(MyNode node) {
         if (!node.hasPrev()) {
             node.getNext().setPrev(null);
         } else {
@@ -63,10 +62,31 @@ public class MyLinkedList<E> implements List {
                 node.getPrev().setNext(node.getNext());
             }
         }
+        this.size--;
+        return true;
     }
 
     public Object remove(int index) {
-        return false;
+        if (!checkIndexCorrect(index)) {
+            throw new IllegalArgumentException("Incorrect index");
+        }
+        getNodeByIndex(index);
+        return true;
+    }
+
+    public MyNode<E> getNodeByIndex(int index) {
+        MyNode node = getFirstNode();
+        for (int i = 0; i <= index; i++) {
+            node = getFirstNode().getNext();
+        }
+        return node;
+    }
+
+    private boolean checkIndexCorrect(int index) {
+        if (index > getSize() | index < 0) {
+            return false;
+        }
+        return true;
     }
 
     public boolean removeFirst() {
@@ -98,6 +118,10 @@ public class MyLinkedList<E> implements List {
 
     public MyNode<E> getFirstNode() {
         return first;
+    }
+
+    public int getSize() {
+        return this.size;
     }
 
     private void setLastNode(MyNode<E> node) {
@@ -148,9 +172,6 @@ public class MyLinkedList<E> implements List {
         setFirstNode(node);
         node.setNext(tmpFirst);
         return true;
-    }
-
-    public void addFirst() {
     }
 
     @Override
@@ -240,7 +261,7 @@ public class MyLinkedList<E> implements List {
             return this.prev;
         }
 
-        private E getElement() {
+        public E getElement() {
             return this.element;
         }
 

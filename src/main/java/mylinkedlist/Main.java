@@ -11,6 +11,9 @@ public class Main {
         System.out.println(myLinkedList.toString());
         myLinkedList.addFirst("5");
         System.out.println(myLinkedList.toString());
-
+        myLinkedList.addLast("7");
+        System.out.println(myLinkedList.toString());
+//        System.out.println(myLinkedList.toString());
+        System.out.println(myLinkedList.getNodeByIndex(2));
     }
 }
