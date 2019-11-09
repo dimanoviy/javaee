@@ -9,6 +9,8 @@ public class Main {
         System.out.println(myLinkedList.toString());
         myLinkedList.remove("2");
         System.out.println(myLinkedList.toString());
+        myLinkedList.addFirst("5");
+        System.out.println(myLinkedList.toString());
 
     }
 }

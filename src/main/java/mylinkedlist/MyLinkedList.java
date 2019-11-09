@@ -131,7 +131,7 @@ public class MyLinkedList<E> implements List {
     }
 
     public boolean addLast(E element) {
-        MyNode node = new MyNode(getLastNode(), element, null);
+        MyNode<E> node = new MyNode<E>(getLastNode(), element, null);
         if (getLastNode() == null) {
             setFirstNode(node);
         } else {
@@ -139,6 +139,15 @@ public class MyLinkedList<E> implements List {
         }
         setLastNode(node);
         size++;
+        return true;
+    }
+
+    public boolean addFirst(E element) {
+        MyNode<E> node = new MyNode<>(null, element, getFirstNode());
+        MyNode<E> tmpFirst = getFirstNode();
+        tmpFirst.setPrev(node);
+        setFirstNode(node);
+        node.setNext(tmpFirst);
         return true;
     }
 
@@ -196,10 +205,10 @@ public class MyLinkedList<E> implements List {
         if (node == null) {
             return "No elements in the list";
         }
-        string += node.getElement() + " -> ";
+        string += node.getElement() + " <-> ";
         while (node.hasNext()) {
             node = node.getNext();
-            string += node.getElement() + " -> ";
+            string += node.getElement() + " <-> ";
         }
         string += " |";
         return string;
