@@ -23,7 +23,7 @@ public class MyLinkedList<E> implements List {
 
     @Override
     public boolean contains(Object object) {
-        MyLinkedList linkList = (MyLinkedList) object;
+        MyLinkedList<E> linkList = (MyLinkedList<E>) object;
         return linkList.isEmpty();
     }
 
@@ -39,7 +39,6 @@ public class MyLinkedList<E> implements List {
 
     @Override
     public boolean remove(Object object) {
-//        MyNode<E> nodeToRemove = new MyNode<>(null, (E) object, null);
         E element = (E) object;
         MyNode<E> node = getFirstNode();
         if (node != null) {
@@ -71,11 +70,11 @@ public class MyLinkedList<E> implements List {
     }
 
     public boolean removeFirst() {
-        return false;
+        return remove(getFirstNode());
     }
 
     public boolean removeLast() {
-        return false;
+        return remove(getLastNode());
     }
 
     @Override
