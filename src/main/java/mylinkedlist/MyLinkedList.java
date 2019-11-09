@@ -70,9 +70,11 @@ public class MyLinkedList<E> implements List {
     private boolean unlinkNode(MyNode node) {
         if (!node.hasPrev()) {
             node.getNext().setPrev(null);
+            this.setFirstNode(node.getNext());
         } else {
             if (!node.hasNext()) {
                 node.getPrev().setNext(null);
+                this.setLastNode(node.getPrev());
             } else {
                 node.getPrev().setNext(node.getNext());
             }
@@ -108,11 +110,11 @@ public class MyLinkedList<E> implements List {
     }
 
     public boolean removeFirst() {
-        return remove(getFirstNode());
+        return unlinkNode(getFirstNode());
     }
 
     public boolean removeLast() {
-        return remove(getLastNode());
+        return unlinkNode(getLastNode());
     }
 
     @Override
