@@ -131,7 +131,6 @@ public class MyLinkedList<E> implements List {
         this.last = node;
     }
 
-
     private void setFirstNode(MyNode<E> node) {
         this.first = node;
     }
@@ -149,7 +148,7 @@ public class MyLinkedList<E> implements List {
         if (!checkIndexCorrect(index)) {
             throw new IllegalArgumentException("Incorrect index");
         }
-
+        getNodeByIndex(index).setElement((E) element);
         return null;
     }
 
@@ -158,6 +157,10 @@ public class MyLinkedList<E> implements List {
         if (!checkIndexCorrect(index)) {
             throw new IllegalArgumentException("Incorrect index");
         }
+        MyNode<E> nodeReplaced = getNodeByIndex(index);
+        MyNode<E> node = new MyNode<>(nodeReplaced.getPrev(), (E) element, nodeReplaced);
+        nodeReplaced.getPrev().setNext(node);
+        nodeReplaced.setPrev(node);
     }
 
     @Override
@@ -265,12 +268,16 @@ public class MyLinkedList<E> implements List {
             this.next = next;
         }
 
-        private void setNext(MyNode node) {
+        private void setNext(MyNode<E> node) {
             this.next = node;
         }
 
-        private void setPrev(MyNode node) {
+        private void setPrev(MyNode<E> node) {
             this.prev = node;
+        }
+
+        private void setElement(E element) {
+            this.element = element;
         }
 
         private MyNode<E> getNext() {

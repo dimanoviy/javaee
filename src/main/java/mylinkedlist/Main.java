@@ -13,7 +13,8 @@ public class Main {
 //        System.out.println(myLinkedList.toString());
 //        myLinkedList.addLast("7");
 //        System.out.println(myLinkedList.toString());
-//        System.out.println(myLinkedList.toString());
-        System.out.println(myLinkedList.getNodeByIndex(8));
+        myLinkedList.set(2, "99");
+        System.out.println(myLinkedList.toString());
+
     }
 }
