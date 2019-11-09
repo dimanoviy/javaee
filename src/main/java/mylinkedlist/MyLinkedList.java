@@ -70,7 +70,7 @@ public class MyLinkedList<E> implements List {
         if (!checkIndexCorrect(index)) {
             throw new IllegalArgumentException("Incorrect index");
         }
-        getNodeByIndex(index);
+        unlinkNode(getNodeByIndex(index));
         return true;
     }
 
@@ -141,7 +141,7 @@ public class MyLinkedList<E> implements List {
         if (!checkIndexCorrect(index)) {
             throw new IllegalArgumentException("Incorrect index");
         }
-        return null;
+        return getNodeByIndex(index);
     }
 
     @Override
@@ -149,6 +149,7 @@ public class MyLinkedList<E> implements List {
         if (!checkIndexCorrect(index)) {
             throw new IllegalArgumentException("Incorrect index");
         }
+
         return null;
     }
 
