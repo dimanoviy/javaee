@@ -75,9 +75,12 @@ public class MyLinkedList<E> implements List {
     }
 
     public MyNode<E> getNodeByIndex(int index) {
+        if (!checkIndexCorrect(index)) {
+            throw new IllegalArgumentException("Incorrect index");
+        }
         MyNode node = getFirstNode();
-        for (int i = 0; i <= index; i++) {
-            node = getFirstNode().getNext();
+        for (int i = 1; i <= index; i++) {
+            node = node.getNext();
         }
         return node;
     }
@@ -135,17 +138,25 @@ public class MyLinkedList<E> implements List {
 
     @Override
     public Object get(int index) {
+        if (!checkIndexCorrect(index)) {
+            throw new IllegalArgumentException("Incorrect index");
+        }
         return null;
     }
 
     @Override
     public Object set(int index, Object element) {
+        if (!checkIndexCorrect(index)) {
+            throw new IllegalArgumentException("Incorrect index");
+        }
         return null;
     }
 
     @Override
     public void add(int index, Object element) {
-
+        if (!checkIndexCorrect(index)) {
+            throw new IllegalArgumentException("Incorrect index");
+        }
     }
 
     @Override
@@ -161,7 +172,7 @@ public class MyLinkedList<E> implements List {
             getLastNode().setNext(node);
         }
         setLastNode(node);
-        size++;
+        this.size++;
         return true;
     }
 
@@ -171,11 +182,13 @@ public class MyLinkedList<E> implements List {
         tmpFirst.setPrev(node);
         setFirstNode(node);
         node.setNext(tmpFirst);
+        this.size++;
         return true;
     }
 
     @Override
     public int indexOf(Object o) {
+
         return 0;
     }
 
@@ -191,11 +204,17 @@ public class MyLinkedList<E> implements List {
 
     @Override
     public ListIterator listIterator(int index) {
+        if (!checkIndexCorrect(index)) {
+            throw new IllegalArgumentException("Incorrect index");
+        }
         return null;
     }
 
     @Override
     public List subList(int fromIndex, int toIndex) {
+        if (!checkIndexCorrect(fromIndex) | !checkIndexCorrect(toIndex)) {
+            throw new IllegalArgumentException("Incorrect index");
+        }
         return null;
     }
 
@@ -261,7 +280,7 @@ public class MyLinkedList<E> implements List {
             return this.prev;
         }
 
-        public E getElement() {
+        private E getElement() {
             return this.element;
         }
 
