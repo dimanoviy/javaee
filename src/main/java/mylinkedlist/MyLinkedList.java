@@ -48,8 +48,10 @@ public class MyLinkedList<E> implements List {
                 if (node.equals(objectToRemove)) {
                     return unlinkNode(node);
                 }
-                node=node.getNext();
-            } while (node.hasNext());
+                if (node.hasNext()) {
+                    node=node.getNext();
+                }
+            } while (node.getPrev().hasNext());
         } else removeByElement(null);
         return false;
     }
