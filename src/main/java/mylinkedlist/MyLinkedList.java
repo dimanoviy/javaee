@@ -120,26 +120,32 @@ public class MyLinkedList<E> implements List {
     }
 
     @Override
-    public boolean addAll(Collection c) {
-        return false;
+    public boolean addAll(Collection collection) {
+        return addAll(this.getSize(), collection);
     }
 
     @Override
-    public boolean addAll(int index, Collection c) {
-        return false;
+    public boolean addAll(int index, Collection collection) {
+        for (Object item: collection) {
+            E elementOfItem = (E) ((MyNode) item).getElement();
+            addLast(elementOfItem);
+        }
+        return true;
     }
 
     @Override
     public void clear() {
-
+        this.setFirstNode(null);
+        this.setLastNode(null);
+        this.size = 0;
     }
 
     public MyNode<E> getLastNode() {
-        return last;
+        return this.last;
     }
 
     public MyNode<E> getFirstNode() {
-        return first;
+        return this.first;
     }
 
     public int getSize() {
@@ -210,9 +216,11 @@ public class MyLinkedList<E> implements List {
     }
 
     @Override
-    public int indexOf(Object o) {
+    public int indexOf(Object object) {
+        for (int i = 0; i < this.getSize(); i++) {
 
-        return 0;
+        }
+        return -1;
     }
 
     @Override
