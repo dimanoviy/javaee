@@ -38,8 +38,23 @@ public class MyLinkedList<E> implements List {
     }
 
     @Override
-    public boolean remove(Object object) {
-        E element = (E) object;
+    public boolean remove(Object objectToRemove) {
+        MyNode<E> node = getFirstNode();
+        if (this.isEmpty()) {
+            return false;
+        }
+        if (objectToRemove != null) {
+            do {
+                if (node.equals(objectToRemove)) {
+                    return unlinkNode(node);
+                }
+                node=node.getNext();
+            } while (node.hasNext());
+        } else removeByElement(null);
+        return false;
+    }
+
+    public boolean removeByElement(E element) {
         MyNode<E> node = getFirstNode();
         if (node != null) {
             do {
