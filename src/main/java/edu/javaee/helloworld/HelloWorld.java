@@ -1,4 +1,4 @@
-package edu.javaee;
+package edu.javaee.helloworld;
 
 public class HelloWorld {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package edu.javaee;
+package edu.javaee.myhashmap;
 
 import edu.javaee.myhashmap.MyHashMap;
 

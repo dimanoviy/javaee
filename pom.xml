@@ -15,7 +15,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>edu.javaee.TestClass</mainClass>
+                            <mainClass>edu.javaee.myhashmap.TestClass</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
