@@ -49,7 +49,7 @@ public class MyLinkedList<E> implements List {
                     return unlinkNode(node);
                 }
                 if (node.hasNext()) {
-                    node=node.getNext();
+                    node = node.getNext();
                 }
             } while (node.getPrev().hasNext());
         } else removeByElement(null);
@@ -63,7 +63,7 @@ public class MyLinkedList<E> implements List {
                 if (node.getElement() == element) {
                     return unlinkNode(node);
                 }
-                node=node.getNext();
+                node = node.getNext();
             } while (node.hasNext());
         }
         return false;
@@ -126,7 +126,7 @@ public class MyLinkedList<E> implements List {
 
     @Override
     public boolean addAll(int index, Collection collection) {
-        for (Object item: collection) {
+        for (Object item : collection) {
             E elementOfItem = (E) ((MyNode) item).getElement();
             addLast(elementOfItem);
         }
@@ -217,8 +217,20 @@ public class MyLinkedList<E> implements List {
 
     @Override
     public int indexOf(Object object) {
+        if (this.isEmpty()) {
+            return -1;
+        }
+        MyNode node = this.getFirstNode();
         for (int i = 0; i < this.getSize(); i++) {
-
+            if (object != null) {
+                if (node.equals((MyNode) object)) {
+                    return i;
+                }
+            } else {
+                if (node.getElement() == null) {
+                    return i;
+                }
+            }
         }
         return -1;
     }
@@ -265,8 +277,27 @@ public class MyLinkedList<E> implements List {
     }
 
     @Override
-    public Object[] toArray(Object[] a) {
-        return new Object[0];
+    public Object[] toArray(Object[] array) {
+        Object[] arrayCollected = new Object[array.length + this.getSize()];
+        int i = 0;
+        for (Object item : array) {
+            arrayCollected[i] = item;
+            i++;
+        }
+
+        MyNode node = this.getFirstNode();
+        if (node == null) {
+            return arrayCollected;
+        }
+        i = array.length;
+        do {
+            arrayCollected[i] = node.getPrev();
+            if (node.hasNext()) {
+                node = node.getNext();
+            }
+            i++;
+        } while (node.getPrev().hasNext());
+        return arrayCollected;
     }
 
     public String toString() {
