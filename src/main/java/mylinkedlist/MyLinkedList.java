@@ -279,6 +279,12 @@ public class MyLinkedList<E> implements List {
 
     @Override
     public boolean retainAll(Collection collection) {
+        MyNode node;
+        for (node = this.getFirstNode(); node.hasNext(); node = node.getNext()) {
+            if (!collection.contains(node)) {
+                unlinkNode(node);
+            }
+        }
         return false;
     }
 
