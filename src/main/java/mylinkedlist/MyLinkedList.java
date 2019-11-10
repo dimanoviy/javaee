@@ -236,8 +236,24 @@ public class MyLinkedList<E> implements List {
     }
 
     @Override
-    public int lastIndexOf(Object o) {
-        return 0;
+    public int lastIndexOf(Object object) {
+        if (this.isEmpty()) {
+            return -1;
+        }
+        int lastIndex = -1;
+        MyNode node = this.getFirstNode();
+        for (int i = 0; i < this.getSize(); i++) {
+            if (object != null) {
+                if (node.equals((MyNode) object)) {
+                    lastIndex = i;
+                }
+            } else {
+                if (node.getElement() == null) {
+                    lastIndex = i;
+                }
+            }
+        }
+        return lastIndex;
     }
 
     @Override
@@ -262,18 +278,28 @@ public class MyLinkedList<E> implements List {
     }
 
     @Override
-    public boolean retainAll(Collection c) {
+    public boolean retainAll(Collection collection) {
         return false;
     }
 
     @Override
-    public boolean removeAll(Collection c) {
-        return false;
+    public boolean removeAll(Collection collection) {
+        for (Object item : collection) {
+            if (!this.remove(item)) {
+                return false;
+            };
+        }
+        return true;
     }
 
     @Override
-    public boolean containsAll(Collection c) {
-        return false;
+    public boolean containsAll(Collection collection) {
+        for (Object item : collection) {
+            if (!this.contains(item)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
