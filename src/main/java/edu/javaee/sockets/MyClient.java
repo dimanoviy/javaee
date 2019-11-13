@@ -2,11 +2,10 @@ package edu.javaee.sockets;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
+/**
+ * This client based on sockets is for Server testing
+ */
 public class MyClient {
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket("localhost", 8080);

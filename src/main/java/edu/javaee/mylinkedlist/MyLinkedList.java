@@ -1,4 +1,4 @@
-package mylinkedlist;
+package edu.javaee.mylinkedlist;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -258,6 +258,7 @@ public class MyLinkedList<E> implements List {
 
     @Override
     public ListIterator listIterator() {
+
         return null;
     }
 
