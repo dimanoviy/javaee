@@ -1,8 +1,6 @@
 package edu.javaee.cleanup;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,16 +32,16 @@ public class CleanUpObject {
         }
     }
 
-    private static void cleanupMapFields(Map object, Set<String> fiel) {
-        for (String fieldToCleanup : fiel) {
+    private static void cleanupMapFields(Map object, Set<String> fieldsToCleanup) {
+        for (String fieldToCleanup : fieldsToCleanup) {
             if (object.containsKey(fieldToCleanup)) {
                 object.remove(fieldToCleanup);
             } else throw new IllegalArgumentException("No such key in the map: " + fieldToCleanup);
         }
     }
 
-    private static void cleanUpFields(Object object, Set<String> fiel) throws IllegalAccessException {
-        for (String fieldToCleanup : fiel) {
+    private static void cleanUpFields(Object object, Set<String> fieldsToCleanup) throws IllegalAccessException {
+        for (String fieldToCleanup : fieldsToCleanup) {
             for (Field field : inquiryFields(object)) {
                 if (field.getName().equals(fieldToCleanup)) {
                     purgeField(object, field);
@@ -97,44 +95,5 @@ public class CleanUpObject {
             field.setAccessible(true);
             System.out.println(field.get(object));
         }
-    }
-
-    public static class ClassTest {
-        int uid = 7;
-        String name = "Default name";
-        String value = "Value of item";
-        public ClassTest(){
-
-        }
-        public ClassTest(int uid, String name, String value) {
-            this.uid = uid;
-            this.name = name;
-            this.value = value;
-        }
-    }
-
-    public static void main(String[] args) throws IllegalAccessException, NoSuchFieldException {
-        HashMap map = new HashMap<String, String>();
-        map.put("key1", "value1");
-//        printClass(map);
-        ClassTest instanceClassTest = new ClassTest();
-//        ClassTest instanceClassTest = new ClassTest(23, "name23", "value23");
-
-        Set<String> fieldsToCleanup = new HashSet<>();
-        Set<String> fieldsToOutput = new HashSet<>();
-        fieldsToOutput.add("uid");
-        fieldsToOutput.add("index");
-        fieldsToOutput.add("name");
-        fieldsToOutput.add("serialVersionUID");
-        fieldsToCleanup.add("value");
-        fieldsToCleanup.add("uid");
-        fieldsToCleanup.add("name");
-
-        cleanup(map, fieldsToCleanup, fieldsToOutput);
-//        printFieldsViaReflection(instanceClassTest);
-//        CleanUpObject.cleanUpFields(instanceClassTest, fieldsToCleanup);
-//        printFieldsViaReflection(instanceClassTest);
-//        printInstanceOfClass(instanceClassTest);
-//        printClass(ClassTest.class);
     }
 }
