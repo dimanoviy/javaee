@@ -5,6 +5,14 @@ import java.util.Map;
 import java.util.Set;
 
 public class CleanUpObject {
+    /**
+     * Method allows to remove some fields according @fieldsToClean and print fields according @fieldsToCleanup in @object
+     * @param object
+     * @param fieldsToCleanup
+     * @param fieldsToOutput
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     public static void cleanup(Object object, Set<String> fieldsToCleanup, Set<String> fieldsToOutput) throws NoSuchFieldException, IllegalAccessException {
         if (isMapImplemented(object)) {
             outputMapFields((Map) object, fieldsToOutput);
@@ -15,7 +23,7 @@ public class CleanUpObject {
         }
     }
 
-    public static boolean isMapImplemented (Object object) {
+    private static boolean isMapImplemented (Object object) {
         for (Class aclass : object.getClass().getInterfaces()) {
             if (aclass.getName() == "java.util.Map") {
                 return true;
@@ -86,14 +94,6 @@ public class CleanUpObject {
             case "double" : field.set(object, 0d); break;
             case "boolean" : field.set(object, false); break;
             case "char" : field.set(object, '\u0000'); break;
-        }
-    }
-
-    public static void printFieldsViaReflection(Object object) throws IllegalAccessException {
-        for (Field field : inquiryFields(object)) {
-            System.out.println("Name of field: " + field.getName());
-            field.setAccessible(true);
-            System.out.println(field.get(object));
         }
     }
 }
