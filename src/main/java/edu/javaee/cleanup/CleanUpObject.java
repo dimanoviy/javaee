@@ -27,19 +27,23 @@ public class CleanUpObject {
     }
 
     private static void outputMapFields(Map object, Set<String> fieldsToOutput) {
-        object.values();
+        for (String fieldToOutput : fieldsToOutput) {
+            if (object.containsKey(fieldToOutput)) {
+                System.out.println("Map value " + fieldToOutput + ": " + object.get(fieldToOutput));
+            }
+        }
     }
 
-    private static void cleanupMapFields(Map object, Set<String> fieldsToCleanup) {
-        for (String fieldToCleanup : fieldsToCleanup) {
+    private static void cleanupMapFields(Map object, Set<String> fiel) {
+        for (String fieldToCleanup : fiel) {
             if (object.containsKey(fieldToCleanup)) {
                 object.remove(fieldToCleanup);
             } else throw new IllegalArgumentException("No such key in the map: " + fieldToCleanup);
         }
     }
 
-    private static void cleanUpFields(Object object, Set<String> fieldsToCleanup) throws IllegalAccessException {
-        for (String fieldToCleanup : fieldsToCleanup) {
+    private static void cleanUpFields(Object object, Set<String> fiel) throws IllegalAccessException {
+        for (String fieldToCleanup : fiel) {
             for (Field field : inquiryFields(object)) {
                 if (field.getName().equals(fieldToCleanup)) {
                     purgeField(object, field);
