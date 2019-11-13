@@ -9,7 +9,6 @@ import java.util.Set;
 public class CleanUpObject {
     public static void cleanup(Object object, Set<String> fieldsToCleanup, Set<String> fieldsToOutput) throws NoSuchFieldException, IllegalAccessException {
         if (isMapImplemented(object)) {
-
             outputMapFields((Map) object, fieldsToOutput);
             cleanupMapFields((Map) object, fieldsToCleanup);
         } else {
@@ -32,7 +31,11 @@ public class CleanUpObject {
     }
 
     private static void cleanupMapFields(Map object, Set<String> fieldsToCleanup) {
-        object.clear();
+        for (String fieldToCleanup : fieldsToCleanup) {
+            if (object.containsKey(fieldToCleanup)) {
+                object.remove(fieldToCleanup);
+            } else throw new IllegalArgumentException("No such key in the map: " + fieldToCleanup);
+        }
     }
 
     private static void cleanUpFields(Object object, Set<String> fieldsToCleanup) throws IllegalAccessException {
