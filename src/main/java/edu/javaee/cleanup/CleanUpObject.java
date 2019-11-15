@@ -25,7 +25,7 @@ public class CleanUpObject {
 
     private static boolean isMapImplemented (Object object) {
         for (Class aclass : object.getClass().getInterfaces()) {
-            if (aclass.getName() == "java.util.Map") {
+            if (aclass.getName().contains("Map")) {
                 return true;
             }
         }
