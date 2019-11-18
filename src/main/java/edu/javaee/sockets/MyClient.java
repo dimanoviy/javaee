@@ -15,7 +15,6 @@ public class MyClient {
         bufferedWriter.write("GET\n");
         bufferedWriter.flush();
 
-        String curLine ;
         do {
             System.out.println(bufferedReader.readLine());
         } while (bufferedReader.ready());

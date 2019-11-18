@@ -11,22 +11,36 @@ import static org.junit.Assert.*;
 
 public class CleanUpObjectTest {
 
+    HashMap map = new HashMap<String, String>();
+    Set<String> fieldsToCleanup = new HashSet<>();
+    Set<String> fieldsToOutput = new HashSet<>();
+    {
+        map.put("key1", "value1");
+        map.put("key2", "value2");
+        map.put("key3", "value3");
+
+        fieldsToOutput.add("key2");
+    }
+
+    class ClassTest {
+        int uid = 7;
+        String name = "Default name";
+        String value = "Value of item";
+        public ClassTest(){
+
+        }
+        public ClassTest(int uid, String name, String value) {
+            this.uid = uid;
+            this.name = name;
+            this.value = value;
+        }
+    }
+    ClassTest instanceClassTest = new ClassTest(23, "name23", "value23");
+
     @Test
     public void cleanup() {
-        class ClassTest {
-            int uid = 7;
-            String name = "Default name";
-            String value = "Value of item";
-            public ClassTest(){
-
-            }
-            public ClassTest(int uid, String name, String value) {
-                this.uid = uid;
-                this.name = name;
-                this.value = value;
-            }
-        }
-
+//        cleanup(instanceClassTest, fieldsToCleanup, fieldsToOutput);
+//        assertEquals
 //        public static void printFieldsViaReflection(Object object) throws IllegalAccessException {
 //            for (Field field : inquiryFields(object)) {
 //                System.out.println("Name of field: " + field.getName());
@@ -35,14 +49,8 @@ public class CleanUpObjectTest {
 //            }
 //        }
 
-        HashMap map = new HashMap<String, String>();
-        map.put("key1", "value1");
-//        printClass(map);
 //        CleanUpObject.ClassTest instanceClassTest = new CleanUpObject.ClassTest();
-//        ClassTest instanceClassTest = new ClassTest(23, "name23", "value23");
 
-        Set<String> fieldsToCleanup = new HashSet<>();
-        Set<String> fieldsToOutput = new HashSet<>();
         fieldsToOutput.add("uid");
         fieldsToOutput.add("index");
         fieldsToOutput.add("name");
