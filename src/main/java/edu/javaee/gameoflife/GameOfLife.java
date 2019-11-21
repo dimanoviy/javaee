@@ -4,13 +4,15 @@ import java.io.*;
 
 public class GameOfLife {
     final private static int FIELD_SIZE = 10_000;
-    final private static int LIFE_LASTS = 1_000;
+    final private static int LIFE_LASTS = 1_000_000_000;
     final private static boolean MULTITHREADING = true;
-    final private static byte threadsNumber = 2;
+    final private static byte threadsNumber = 3;
     final private static int MIN_NEIGHBOURS_TO_LIVE = 2;
     final private static int MAX_NEIGHBOURS_TO_LIVE = 3;
     static byte[][] fieldToday = new byte[FIELD_SIZE][FIELD_SIZE];
     final static byte[][] fieldTomorrow = new byte[FIELD_SIZE][FIELD_SIZE];
+    private static int topNeighboursSum;
+    private static int bottomNeighboursSum;
 
     public static void main(String[] args) {
 //        fillFieldFromFile("/resources/input.txt");
@@ -31,13 +33,19 @@ public class GameOfLife {
     }
 
     private static void calculateLifeTodayMultithreaded(byte threadsNumber) {
-        for (int k = 0; k < threadsNumber; k++) {
+        for (byte k = 0; k < threadsNumber; k++) {
+            byte finalK = k;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    calculateTodayThread(finalK);
+                }
+
+                private void calculateTodayThread(byte threadNumber) {
                     for (int i = 0; i < FIELD_SIZE; i++) {
-                        for (int j = 0; j < FIELD_SIZE; j++) {
-                            if ((MIN_NEIGHBOURS_TO_LIVE <= surroundLife(i, j)) & (surroundLife(i, j) <= MAX_NEIGHBOURS_TO_LIVE)) {
+                        for (int j = threadNumber; j < FIELD_SIZE; j+=threadsNumber) {
+                            if ((MIN_NEIGHBOURS_TO_LIVE <= surroundLife(i, j)) &
+                                    (surroundLife(i, j) <= MAX_NEIGHBOURS_TO_LIVE)) {
                                 fieldTomorrow[i][j] = 1;
                             } else {
                                 fieldTomorrow[i][j] = 0;
@@ -62,9 +70,9 @@ public class GameOfLife {
     }
 
     private static int surroundLife(int i, int j) {
-        return fieldToday[prev(i)][prev(j)] + fieldToday[prev(i)][j] + fieldToday[prev(i)][next(j)] +
-                fieldToday[i][prev(j)] + fieldToday[i][next(j)] +
-                fieldToday[next(i)][prev(j)] + fieldToday[next(i)][j] + fieldToday[next(i)][next(j)];
+        topNeighboursSum = fieldToday[prev(i)][prev(j)] + fieldToday[prev(i)][j] + fieldToday[prev(i)][next(j)];
+        bottomNeighboursSum = fieldToday[next(i)][prev(j)] + fieldToday[next(i)][j] + fieldToday[next(i)][next(j)];
+        return topNeighboursSum + fieldToday[i][prev(j)] + fieldToday[i][next(j)] + bottomNeighboursSum;
     }
 
     private static int prev(int i) {
@@ -118,9 +126,9 @@ public class GameOfLife {
     private static void fillRandomlyField() {
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
-                fieldToday[i][j] = (byte) ((byte) (Math.random() * 10) / 5);
+                fieldToday[i][j] = (byte) (Math.round(Math.random()));
+//                fieldToday[i][j] = (byte) ((byte) (Math.random() * 10) / 5);
             }
         }
     }
-
 }

@@ -10,25 +10,22 @@ import java.nio.file.Paths;
 
 public class MyServer {
     public static void main(String[] args) {
-        try {
-            ServerSocket serverSocket = new ServerSocket(8080);
-
+        try (ServerSocket serverSocket = new ServerSocket(8080)){
             while (true) {
+                try (
                 Socket client = serverSocket.accept();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-
-                String request = bufferedReader.readLine();
-                if (request.matches("GET")) {
-                    browseDirectory(bufferedWriter);
-                } else {
-                    bufferedWriter.write("404");
+                ) {
+                    String request = bufferedReader.readLine();
+                    if (request.matches("GET")) {
+                        browseDirectory(bufferedWriter);
+                    } else {
+                        bufferedWriter.write("404");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                bufferedWriter.flush();
-
-//                bufferedWriter.close();
-//                bufferedReader.close();
-//                client.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
