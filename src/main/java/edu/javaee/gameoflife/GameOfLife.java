@@ -3,64 +3,44 @@ package edu.javaee.gameoflife;
 import java.io.*;
 
 public class GameOfLife {
-    final private static int FIELD_SIZE = 10_000;
-    final private static int LIFE_LASTS = 1_000_000_000;
-    final private static boolean MULTITHREADING = true;
-    final private static byte threadsNumber = 3;
-    final private static int MIN_NEIGHBOURS_TO_LIVE = 2;
-    final private static int MAX_NEIGHBOURS_TO_LIVE = 3;
-    static byte[][] fieldToday = new byte[FIELD_SIZE][FIELD_SIZE];
-    final static byte[][] fieldTomorrow = new byte[FIELD_SIZE][FIELD_SIZE];
-    private static int topNeighboursSum;
-    private static int bottomNeighboursSum;
+    private static final int FIELD_SIZE = 5;
+    private static final int LIFE_LASTS = 4;
+    private static final byte threadsNumber = 1;
+    private static final int MIN_NEIGHBOURS_TO_LIVE = 2;
+    private static final int MAX_NEIGHBOURS_TO_LIVE = 3;
+    private static int[][] fieldToday = new int[FIELD_SIZE][FIELD_SIZE];
+    private static final int[][] fieldTomorrow = new int[FIELD_SIZE][FIELD_SIZE];
 
-    public static void main(String[] args) {
-//        fillFieldFromFile("/resources/input.txt");
-        fillRandomlyField();
+    public static void main(String[] args) throws IOException, InterruptedException {
+        fillFieldFromFile("src/main/resources/input.txt");
         long t = System.currentTimeMillis();
         for (int i = 0; i < LIFE_LASTS; i++) {
             if (!isThereLife()) {
                 break;
             }
-            if (MULTITHREADING) {
-                calculateLifeTodayMultithreaded(threadsNumber);
-            } else {
-                calculateLifeToday();
-            }
-            fieldToday = fieldTomorrow;
+            MyThread myThread = new MyThread();
+            myThread.start();
+            myThread.join();
+            transferAndClearTomorrowField();
+            visualizeField();
         }
         System.out.println(System.currentTimeMillis() - t);
     }
 
-    private static void calculateLifeTodayMultithreaded(byte threadsNumber) {
-        for (byte k = 0; k < threadsNumber; k++) {
-            byte finalK = k;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    calculateTodayThread(finalK);
-                }
-
-                private void calculateTodayThread(byte threadNumber) {
-                    for (int i = 0; i < FIELD_SIZE; i++) {
-                        for (int j = threadNumber; j < FIELD_SIZE; j+=threadsNumber) {
-                            if ((MIN_NEIGHBOURS_TO_LIVE <= surroundLife(i, j)) &
-                                    (surroundLife(i, j) <= MAX_NEIGHBOURS_TO_LIVE)) {
-                                fieldTomorrow[i][j] = 1;
-                            } else {
-                                fieldTomorrow[i][j] = 0;
-                            }
-                        }
-                    }
-                }
-            }).start();
+    private static class MyThread extends Thread {
+        @Override
+        public synchronized void run() {
+            calculateLifeToday();
         }
     }
 
-    private static void calculateLifeToday() {
+    private static synchronized void calculateLifeToday() {
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
-                if ((MIN_NEIGHBOURS_TO_LIVE <= surroundLife(i, j)) & (surroundLife(i, j) <= MAX_NEIGHBOURS_TO_LIVE)) {
+                int calculatedSurroundLife = surroundLife(i, j);
+                if (calculatedSurroundLife == MAX_NEIGHBOURS_TO_LIVE) {
+                    fieldTomorrow[i][j] = 1;
+                } else if (calculatedSurroundLife == MIN_NEIGHBOURS_TO_LIVE & fieldToday[i][j] == 1) {
                     fieldTomorrow[i][j] = 1;
                 } else {
                     fieldTomorrow[i][j] = 0;
@@ -70,9 +50,10 @@ public class GameOfLife {
     }
 
     private static int surroundLife(int i, int j) {
-        topNeighboursSum = fieldToday[prev(i)][prev(j)] + fieldToday[prev(i)][j] + fieldToday[prev(i)][next(j)];
-        bottomNeighboursSum = fieldToday[next(i)][prev(j)] + fieldToday[next(i)][j] + fieldToday[next(i)][next(j)];
-        return topNeighboursSum + fieldToday[i][prev(j)] + fieldToday[i][next(j)] + bottomNeighboursSum;
+        int topNeighboursSum = fieldToday[prev(i)][prev(j)] + fieldToday[prev(i)][j] + fieldToday[prev(i)][next(j)];
+        int middleNeighboursSum = fieldToday[i][prev(j)] + fieldToday[i][next(j)];
+        int bottomNeighboursSum = fieldToday[next(i)][prev(j)] + fieldToday[next(i)][j] + fieldToday[next(i)][next(j)];
+        return topNeighboursSum + middleNeighboursSum + bottomNeighboursSum;
     }
 
     private static int prev(int i) {
@@ -96,7 +77,9 @@ public class GameOfLife {
             }
             System.out.println();
         }
+        System.out.println("========================");
     }
+
     private static boolean isThereLife() {
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
@@ -108,26 +91,38 @@ public class GameOfLife {
         return false;
     }
 
-    private static void fillFieldFromFile(String fileName) throws IOException {
+    public static void fillFieldFromFile(String fileName) throws IOException {
         File file = new File(fileName);
-        DataInputStream targetStream = new DataInputStream(new FileInputStream(file));
+        DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
-                if (targetStream.read() == 48) {
-                    fieldToday[i][j] = 0;
-                } else {
+                int read = dataInputStream.read();
+                if (read == 10) {
+                    j--;
+                    continue;
+                } else if (read == 49) {
                     fieldToday[i][j] = 1;
+                } else if (read == 48) {
+                    fieldToday[i][j] = 0;
                 }
             }
         }
-        targetStream.close();
+        dataInputStream.close();
     }
 
     private static void fillRandomlyField() {
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
                 fieldToday[i][j] = (byte) (Math.round(Math.random()));
-//                fieldToday[i][j] = (byte) ((byte) (Math.random() * 10) / 5);
+            }
+        }
+    }
+
+    private static void transferAndClearTomorrowField() {
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            for (int j = 0; j < FIELD_SIZE; j++) {
+                fieldToday[i][j] = fieldTomorrow[i][j];
+                fieldTomorrow[i][j] = 0;
             }
         }
     }

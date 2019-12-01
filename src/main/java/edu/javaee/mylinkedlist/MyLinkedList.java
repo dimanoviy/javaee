@@ -1,21 +1,28 @@
 package edu.javaee.mylinkedlist;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
+/**
+ * My realization of Linked List
+ *
+ * @param <E>
+ */
 public class MyLinkedList<E> implements List {
-    int size;
-    MyNode<E> first;
-    MyNode<E> last;
+    private int size;
+    private MyNode<E> first;
+    private MyNode<E> last;
 
-
+    /**
+     * @return size of a linked list
+     */
     @Override
     public int size() {
         return this.size;
     }
 
+    /**
+     * @return if a list empty or not
+     */
     @Override
     public boolean isEmpty() {
         return (size == 0);
@@ -52,7 +59,9 @@ public class MyLinkedList<E> implements List {
                     node = node.getNext();
                 }
             } while (node.getPrev().hasNext());
-        } else removeByElement(null);
+        } else {
+            removeByElement(null);
+        }
         return false;
     }
 
@@ -105,7 +114,7 @@ public class MyLinkedList<E> implements List {
     }
 
     private boolean checkIndexCorrect(int index) {
-        if (index > getSize() | index < 0) {
+        if (index > size() | index < 0) {
             return false;
         }
         return true;
@@ -121,7 +130,7 @@ public class MyLinkedList<E> implements List {
 
     @Override
     public boolean addAll(Collection collection) {
-        return addAll(this.getSize(), collection);
+        return addAll(this.size(), collection);
     }
 
     @Override
@@ -148,9 +157,9 @@ public class MyLinkedList<E> implements List {
         return this.first;
     }
 
-    public int getSize() {
-        return this.size;
-    }
+//    public int getSize() {
+//        return this.size;
+//    }
 
     private void setLastNode(MyNode<E> node) {
         this.last = node;
@@ -215,15 +224,21 @@ public class MyLinkedList<E> implements List {
         return true;
     }
 
+    /**
+     * Finds position (index) of object in a list
+     *
+     * @param object to find
+     * @return index of the object
+     */
     @Override
     public int indexOf(Object object) {
         if (this.isEmpty()) {
             return -1;
         }
         MyNode node = this.getFirstNode();
-        for (int i = 0; i < this.getSize(); i++) {
+        for (int i = 0; i < this.size(); i++) {
             if (object != null) {
-                if (node.equals((MyNode) object)) {
+                if (node.equals(object)) {
                     return i;
                 }
             } else {
@@ -231,6 +246,7 @@ public class MyLinkedList<E> implements List {
                     return i;
                 }
             }
+            node = node.getNext();
         }
         return -1;
     }
@@ -242,9 +258,9 @@ public class MyLinkedList<E> implements List {
         }
         int lastIndex = -1;
         MyNode node = this.getFirstNode();
-        for (int i = 0; i < this.getSize(); i++) {
+        for (int i = 0; i < this.size(); i++) {
             if (object != null) {
-                if (node.equals((MyNode) object)) {
+                if (node.equals(object)) {
                     lastIndex = i;
                 }
             } else {
@@ -252,16 +268,17 @@ public class MyLinkedList<E> implements List {
                     lastIndex = i;
                 }
             }
+            node = node.getNext();
         }
         return lastIndex;
     }
 
     @Override
     public ListIterator listIterator() {
-
-        return null;
+        return listIterator(0);
     }
 
+    //TODO
     @Override
     public ListIterator listIterator(int index) {
         if (!checkIndexCorrect(index)) {
@@ -270,12 +287,37 @@ public class MyLinkedList<E> implements List {
         return null;
     }
 
+    /**
+     * Returns sublist from fromIndex to toIndex
+     * @param fromIndex
+     * @param toIndex
+     * @return
+     */
     @Override
-    public List subList(int fromIndex, int toIndex) {
+    public MyLinkedList<E> subList(int fromIndex, int toIndex) {
         if (!checkIndexCorrect(fromIndex) | !checkIndexCorrect(toIndex)) {
             throw new IllegalArgumentException("Incorrect index");
         }
-        return null;
+        MyLinkedList<E> list = new MyLinkedList<E>();
+        MyNode<E> node = pickNode(fromIndex);
+        list.setFirstNode(node);
+        for (int i = fromIndex; i <= toIndex; i++) {
+            list.add(node);
+            if (i != toIndex) {
+                node = node.getNext();
+            }
+        }
+        list.setLastNode(node);
+        return list;
+
+    }
+
+    private MyNode<E> pickNode(int index) {
+        MyNode<E> node = this.getFirstNode();
+        for (int i = 1; i <= index; i++) {
+            node = node.getNext();
+        }
+        return node;
     }
 
     @Override
@@ -294,7 +336,8 @@ public class MyLinkedList<E> implements List {
         for (Object item : collection) {
             if (!this.remove(item)) {
                 return false;
-            };
+            }
+            ;
         }
         return true;
     }
@@ -311,7 +354,7 @@ public class MyLinkedList<E> implements List {
 
     @Override
     public Object[] toArray(Object[] array) {
-        Object[] arrayCollected = new Object[array.length + this.getSize()];
+        Object[] arrayCollected = new Object[array.length + this.size()];
         int i = 0;
         for (Object item : array) {
             arrayCollected[i] = item;

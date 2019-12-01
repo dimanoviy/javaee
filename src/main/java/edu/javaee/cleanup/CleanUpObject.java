@@ -7,6 +7,7 @@ import java.util.Set;
 public class CleanUpObject {
     /**
      * Method allows to remove some fields according @fieldsToClean and print fields according @fieldsToCleanup in @object
+     *
      * @param object
      * @param fieldsToCleanup
      * @param fieldsToOutput
@@ -23,7 +24,7 @@ public class CleanUpObject {
         }
     }
 
-    private static boolean isMapImplemented (Object object) {
+    private static boolean isMapImplemented(Object object) {
         for (Class aclass : object.getClass().getInterfaces()) {
             if (aclass.getName().contains("Map")) {
                 return true;
@@ -86,14 +87,28 @@ public class CleanUpObject {
 
     private static void purgePrimitiveField(Field field, Object object) throws IllegalAccessException {
         switch (field.getType().getName()) {
-            case "byte" : field.set(object, 0); break;
-            case "short" : field.set(object, 0); break;
-            case "int" : field.set(object, 0); break;
-            case "long" : field.set(object, 0L); break;
-            case "float" : field.set(object, 0f); break;
-            case "double" : field.set(object, 0d); break;
-            case "boolean" : field.set(object, false); break;
-            case "char" : field.set(object, '\u0000'); break;
+            case "byte":
+            case "short":
+            case "int":
+                field.set(object, 0);
+                break;
+            case "long":
+                field.set(object, 0L);
+                break;
+            case "float":
+                field.set(object, 0f);
+                break;
+            case "double":
+                field.set(object, 0d);
+                break;
+            case "boolean":
+                field.set(object, false);
+                break;
+            case "char":
+                field.set(object, '\u0000');
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + field.getType().getName());
         }
     }
 }
