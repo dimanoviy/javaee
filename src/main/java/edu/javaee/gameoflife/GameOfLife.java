@@ -5,7 +5,7 @@ import java.io.*;
 public class GameOfLife {
     private static final int FIELD_SIZE = 5;
     private static final int LIFE_LASTS = 4;
-    private static final byte threadsNumber = 1;
+    private static final byte THREADS_NUMBER = 1;
     private static final int MIN_NEIGHBOURS_TO_LIVE = 2;
     private static final int MAX_NEIGHBOURS_TO_LIVE = 3;
     private static int[][] fieldToday = new int[FIELD_SIZE][FIELD_SIZE];
@@ -18,25 +18,31 @@ public class GameOfLife {
             if (!isThereLife()) {
                 break;
             }
-            MyThread myThread = new MyThread();
-            myThread.start();
-            myThread.join();
+            runMultiThreads(THREADS_NUMBER);
             transferAndClearTomorrowField();
             visualizeField();
         }
         System.out.println(System.currentTimeMillis() - t);
     }
 
-    private static class MyThread extends Thread {
-        @Override
-        public synchronized void run() {
-            calculateLifeToday();
+    private static void runMultiThreads(int threadsNumber) throws InterruptedException {
+        Thread[] threads = new Thread[threadsNumber];
+        for (int i = 0; i < threadsNumber; i++) {
+            int finalI = i;
+            Runnable runnable = () -> calculateLifeToday(finalI);
+            Thread thread = new Thread(runnable);
+            thread.start();
+            thread.join();
+        }
+
+        for (Thread thread : threads) {
+            
         }
     }
 
-    private static synchronized void calculateLifeToday() {
+    private static synchronized void calculateLifeToday(int number) {
         for (int i = 0; i < FIELD_SIZE; i++) {
-            for (int j = 0; j < FIELD_SIZE; j++) {
+            for (int j = number; j < FIELD_SIZE; j += THREADS_NUMBER) {
                 int calculatedSurroundLife = surroundLife(i, j);
                 if (calculatedSurroundLife == MAX_NEIGHBOURS_TO_LIVE) {
                     fieldTomorrow[i][j] = 1;
@@ -91,7 +97,7 @@ public class GameOfLife {
         return false;
     }
 
-    public static void fillFieldFromFile(String fileName) throws IOException {
+    private static void fillFieldFromFile(String fileName) throws IOException {
         File file = new File(fileName);
         DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
         for (int i = 0; i < FIELD_SIZE; i++) {
