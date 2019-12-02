@@ -4,7 +4,7 @@ import java.io.*;
 
 public class GameOfLife {
     private static final int FIELD_SIZE = 5;
-    private static final int LIFE_LASTS = 4;
+    private static final int LIFE_LASTS = 400;
     private static final byte THREADS_NUMBER = 1;
     private static final int MIN_NEIGHBOURS_TO_LIVE = 2;
     private static final int MAX_NEIGHBOURS_TO_LIVE = 3;
@@ -30,13 +30,12 @@ public class GameOfLife {
         for (int i = 0; i < threadsNumber; i++) {
             int finalI = i;
             Runnable runnable = () -> calculateLifeToday(finalI);
-            Thread thread = new Thread(runnable);
-            thread.start();
-            thread.join();
+            threads[i] = new Thread(runnable);
+            threads[i].start();
         }
 
         for (Thread thread : threads) {
-            
+            thread.join();
         }
     }
 
