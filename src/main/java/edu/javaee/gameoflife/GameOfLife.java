@@ -4,10 +4,13 @@ import java.io.*;
 
 public class GameOfLife {
     private static final int FIELD_SIZE = 5;
-    private static final int LIFE_LASTS = 400;
-    private static final byte THREADS_NUMBER = 1;
+    private static final int LIFE_LASTS = 4;
+    private static final boolean MULTITHREADED = false;
+    private static final byte THREADS_NUMBER = 3;
     private static final int MIN_NEIGHBOURS_TO_LIVE = 2;
     private static final int MAX_NEIGHBOURS_TO_LIVE = 3;
+    private static final int ASC_CODE_OF_1 = 49;
+    private static final int ASC_CODE_OF_0 = 48;
     private static int[][] fieldToday = new int[FIELD_SIZE][FIELD_SIZE];
     private static final int[][] fieldTomorrow = new int[FIELD_SIZE][FIELD_SIZE];
 
@@ -18,7 +21,11 @@ public class GameOfLife {
             if (!isThereLife()) {
                 break;
             }
-            runMultiThreads(THREADS_NUMBER);
+            if (MULTITHREADED) {
+                runMultiThreads(THREADS_NUMBER);
+            } else {
+                calculateLifeToday(0, 1);
+            }
             transferAndClearTomorrowField();
             visualizeField();
         }
@@ -29,7 +36,7 @@ public class GameOfLife {
         Thread[] threads = new Thread[threadsNumber];
         for (int i = 0; i < threadsNumber; i++) {
             int finalI = i;
-            Runnable runnable = () -> calculateLifeToday(finalI);
+            Runnable runnable = () -> calculateLifeToday(finalI, THREADS_NUMBER);
             threads[i] = new Thread(runnable);
             threads[i].start();
         }
@@ -39,9 +46,9 @@ public class GameOfLife {
         }
     }
 
-    private static synchronized void calculateLifeToday(int number) {
+    private static synchronized void calculateLifeToday(int number, int threadsNumber) {
         for (int i = 0; i < FIELD_SIZE; i++) {
-            for (int j = number; j < FIELD_SIZE; j += THREADS_NUMBER) {
+            for (int j = number; j < FIELD_SIZE; j += threadsNumber) {
                 int calculatedSurroundLife = surroundLife(i, j);
                 if (calculatedSurroundLife == MAX_NEIGHBOURS_TO_LIVE) {
                     fieldTomorrow[i][j] = 1;
@@ -98,21 +105,20 @@ public class GameOfLife {
 
     private static void fillFieldFromFile(String fileName) throws IOException {
         File file = new File(fileName);
-        DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
-        for (int i = 0; i < FIELD_SIZE; i++) {
-            for (int j = 0; j < FIELD_SIZE; j++) {
-                int read = dataInputStream.read();
-                if (read == 10) {
-                    j--;
-                    continue;
-                } else if (read == 49) {
-                    fieldToday[i][j] = 1;
-                } else if (read == 48) {
-                    fieldToday[i][j] = 0;
+        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file))) {
+            for (int i = 0; i < FIELD_SIZE; i++) {
+                for (int j = 0; j < FIELD_SIZE; j++) {
+                    int read = dataInputStream.read();
+                    if (read == ASC_CODE_OF_1) {
+                        fieldToday[i][j] = 1;
+                    } else if (read == ASC_CODE_OF_0) {
+                        fieldToday[i][j] = 0;
+                    } else {
+                        j--;
+                    }
                 }
             }
         }
-        dataInputStream.close();
     }
 
     private static void fillRandomlyField() {
